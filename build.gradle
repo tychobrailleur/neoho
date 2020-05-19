@@ -1,0 +1,82 @@
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
+
+    // Apply the application plugin to add support for building a CLI application.
+    id 'application'
+    id 'org.beryx.jlink' version '2.19.0'
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
+}
+
+java {
+    compileJava.options.encoding = 'UTF-8'
+    sourceCompatibility = JavaVersion.VERSION_14
+    targetCompatibility = JavaVersion.VERSION_14
+}
+
+repositories {
+    // Use jcenter for resolving dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:28.2-jre'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'neoho.App'
+}
+
+mainClassName = 'neoho/neoho.App'
+jar {
+    manifest {
+        attributes 'Implementation-Title': "neoho",
+                'Main-Class': 'neoho.App'
+    }
+}
+
+jlink {
+    mergedModule {
+        requires 'java.desktop'
+    }
+    launcher {
+        name = 'HO'
+        jvmArgs = ['-Dlogback.configurationFile=./logback.xml']
+    }
+}
+//
+//jlink {
+//    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+//    launcher {
+//        name = 'NeoHo'
+//    }
+//
+//    mergedModule {
+//
+//    }
+//
+//    jpackage {
+//        outputDir = "distribution"
+//
+//        if (OperatingSystem.current().isMacOsX()) {
+//            imageOptions = [
+//                    '--icon', "${projectDir}/src/main/resources/icons/jabref.icns",
+//                    '--resource-dir', "${projectDir}/buildres/mac"
+//            ]
+//            installerOptions = [
+//                    '--verbose',
+//                    '--vendor', 'HO',
+//                    '--app-version', "${project.version}",
+//                    '--file-associations', "${projectDir}/buildres/mac/bibtexAssociations.properties",
+//                    '--resource-dir', "${projectDir}/buildres/mac"
+//            ]
+//        }
+//    }
+//}
