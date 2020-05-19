@@ -3,3 +3,7 @@ Experiment with Java 14 and jpackage.
 #+begin_src bash
 ./gradlew jpackage
 #+end_src
+
+
+See [[http://openjdk.java.net/projects/jigsaw/quick-start]] for module
+quick start.
