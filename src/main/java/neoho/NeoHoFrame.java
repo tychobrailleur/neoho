@@ -67,15 +67,18 @@ public class NeoHoFrame extends JFrame {
 
     private URL getImageUrl(String path) {
         URL url = NeoHoFrame.class.getResource(path);
-        if (url == null) {
-            try {
-                // This is a shameless hack to get resources to load from IntelliJ.
-                return new File("./src/main/resources" + path).toURI().toURL();
-            } catch (MalformedURLException e) {
-                // At this point this is hopeless.
-                e.printStackTrace();
-            }
-        }
+
+        // Uncomment below to use with workaround for IntelliJ.
+
+        // if (url == null) {
+        //     try {
+        //         // This is a shameless hack to get resources to load from IntelliJ.
+        //         return new File("./src/main/resources" + path).toURI().toURL();
+        //     } catch (MalformedURLException e) {
+        //         // At this point this is hopeless.
+        //         e.printStackTrace();
+        //     }
+        // }
         return url;
     }
 }
