@@ -35,8 +35,10 @@ public class NeoHoFrame extends JFrame {
         final JLabel iconLabel = new JLabel();
         System.out.println(String.format("Image URL: %s", url.toExternalForm()));
         iconLabel.setIcon(new ImageIcon(url));
+        iconLabel.setHorizontalAlignment(JLabel.CENTER);
+        iconLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
-        //executeCall();
+        executeCall();
 
         mainPanel.add(iconLabel, BorderLayout.CENTER);
         getContentPane().add(mainPanel);
@@ -65,15 +67,15 @@ public class NeoHoFrame extends JFrame {
 
     private URL getImageUrl(String path) {
         URL url = NeoHoFrame.class.getResource(path);
-//        if (url == null) {
-//            try {
-//                // This is a shameless hack to get resources to load from IntelliJ.
-//                return new File("./src/main/resources" + path).toURI().toURL();
-//            } catch (MalformedURLException e) {
-//                // At this point this is hopeless.
-//                e.printStackTrace();
-//            }
-//        }
+        if (url == null) {
+            try {
+                // This is a shameless hack to get resources to load from IntelliJ.
+                return new File("./src/main/resources" + path).toURI().toURL();
+            } catch (MalformedURLException e) {
+                // At this point this is hopeless.
+                e.printStackTrace();
+            }
+        }
         return url;
     }
 }
