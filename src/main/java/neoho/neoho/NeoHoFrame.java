@@ -1,9 +1,13 @@
 package neoho;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -32,21 +36,44 @@ public class NeoHoFrame extends JFrame {
         System.out.println(String.format("Image URL: %s", url.toExternalForm()));
         iconLabel.setIcon(new ImageIcon(url));
 
+        //executeCall();
+
         mainPanel.add(iconLabel, BorderLayout.CENTER);
         getContentPane().add(mainPanel);
     }
 
+    private void executeCall() {
+        try {
+            OkHttpClient client = new OkHttpClient.Builder().build();
+
+            Request request = new Request.Builder()
+                    .url("http://dbpedia.org/page/FC_Nantes")
+                    .addHeader("Accept", "text/html")
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.isSuccessful()) {
+                System.out.println(response.body().string());
+            } else {
+                System.err.println(response.body().string());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private URL getImageUrl(String path) {
         URL url = NeoHoFrame.class.getResource(path);
-        if (url == null) {
-            try {
-                // This is a shameless hack to get resources to load from IntelliJ.
-                return new File("./src/main/resources" + path).toURI().toURL();
-            } catch (MalformedURLException e) {
-                // At this point this is hopeless.
-                e.printStackTrace();
-            }
-        }
+//        if (url == null) {
+//            try {
+//                // This is a shameless hack to get resources to load from IntelliJ.
+//                return new File("./src/main/resources" + path).toURI().toURL();
+//            } catch (MalformedURLException e) {
+//                // At this point this is hopeless.
+//                e.printStackTrace();
+//            }
+//        }
         return url;
     }
 }
