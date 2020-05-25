@@ -9,6 +9,7 @@ java {
     compileJava.options.encoding = 'UTF-8'
     sourceCompatibility = JavaVersion.VERSION_14
     targetCompatibility = JavaVersion.VERSION_14
+    modularity.inferModulePath.set(true)
 }
 
 repositories {
@@ -55,5 +56,41 @@ jlink {
                 '--icon', "${projectDir}/buildResources/Mac/HO.icns",
                 '--resource-dir', "${projectDir}/buildResources/Mac"
         ]
+    }
+}
+
+// Workaround as per https://youtrack.jetbrains.com/issue/IDEA-197469
+def moduleVersion = project.version
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+        }
+        resources {
+            srcDirs = ["src/main/java", "src/main/resources"]
+        }
+    }
+    test {
+        java {
+            srcDirs = ["src/test/java"]
+        }
+        resources {
+            srcDirs = ["src/test/resources"]
+        }
+    }
+
+    // at compile time, put resources in same directories as classes
+    main.output.resourcesDir = main.java.outputDir
+}
+
+// at run time, make Gradle use the module path
+run {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--module', "$moduleName/$mainClassName"
+        ]
+        classpath = files()
     }
 }
